@@ -187,32 +187,6 @@ a{color:inherit;}
 #musicToggle:hover{transform:scale(1.08);}
 #musicToggle.playing .disc{animation:spin 4s linear infinite;}
 
-
-/* ============================= LANGUAGE SWITCH ============================= */
-#languageSwitch{
-  position:fixed; right:22px; top:22px; z-index:61;
-  display:none; align-items:center; gap:4px;
-  padding:5px; border-radius:30px;
-  background:rgba(255,255,255,.62);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(201,160,90,.38);
-  box-shadow:0 10px 26px -16px rgba(169,121,63,.5);
-}
-#languageSwitch.show{display:flex;}
-#languageSwitch button{
-  border:0; background:transparent; color:var(--ink-soft);
-  padding:7px 10px; border-radius:22px; cursor:pointer;
-  font-family:var(--font-label); font-size:10px; letter-spacing:.08em;
-  transition:.3s var(--ease);
-}
-#languageSwitch button.active{
-  background:var(--gold-deep); color:#fff;
-}
-@media (max-width:600px){
-  #languageSwitch{right:14px; top:14px;}
-  #languageSwitch button{padding:6px 8px; font-size:9px;}
-}
-
 /* ============================= HERO ============================= */
 .hero{
   min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center;
@@ -355,64 +329,112 @@ a{color:inherit;}
 @media (max-width:480px){.cd-box{width:78px; padding:16px 4px;}}
 
 /* ============================= GALLERY ============================= */
+.gallery-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:18px;
+}
+.gallery-item{
+  position:relative; aspect-ratio:1/1.15; border-radius:16px; overflow:hidden; cursor:pointer;
+  box-shadow:0 14px 30px -18px rgba(169,121,63,.5);
+  transform:translateY(0); transition:transform .5s var(--ease), box-shadow .5s var(--ease);
+  border:1px solid rgba(255,255,255,.6);
+}
+.gallery-item:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 24px 44px -18px rgba(169,121,63,.6);}
+.gallery-item .ph{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
+  color:#fff; font-family:var(--font-label); font-size:11px; letter-spacing:.15em; text-transform:uppercase;
+}
+.gallery-item .ph span.num{font-family:var(--font-script); font-size:34px; letter-spacing:0; text-transform:none;}
+.gallery-item::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,.15); opacity:0; transition:.4s;}
+.gallery-item:hover::before{opacity:1;}
+.gallery-item .zoom-ic{position:absolute; bottom:12px; right:12px; color:#fff; font-size:16px; opacity:0; transition:.4s; z-index:2;}
+.gallery-item:hover .zoom-ic{opacity:1;}
+
+/* lightbox */
+#lightbox{
+  position:fixed; inset:0; background:rgba(30,20,18,.92); z-index:9997;
+  display:none; align-items:center; justify-content:center; padding:20px;
+}
+#lightbox.open{display:flex; animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+#lightbox .lb-frame{
+  position:relative; max-width:640px; width:100%; aspect-ratio:1/1.1; border-radius:18px; overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.2);
+}
+.lb-close,.lb-prev,.lb-next{
+  position:absolute; z-index:2; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  color:#fff; width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:18px; backdrop-filter:blur(6px); transition:.3s;
+}
+.lb-close:hover,.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.28);}
+.lb-close{top:-54px; right:0;}
+.lb-prev{left:14px; top:50%; transform:translateY(-50%);}
+.lb-next{right:14px; top:50%; transform:translateY(-50%);}
+
+
+/* ===================== GALLERY — ONE CARD / FIVE PHOTOS ===================== */
 .gallery-card{
   position:relative;
-  max-width:760px;
+  max-width:780px;
   margin:0 auto;
   padding:14px;
   border-radius:24px;
-  background:rgba(255,255,255,.58);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,.75);
+  background:rgba(255,255,255,.60);
+  border:1px solid rgba(255,255,255,.8);
   box-shadow:var(--shadow-soft);
-  overflow:hidden;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
 }
-.gallery-card::before{
+.gallery-card:before{
   content:"";
-  position:absolute; inset:8px;
+  position:absolute;
+  inset:8px;
   border:1px solid rgba(201,160,90,.35);
   border-radius:18px;
   pointer-events:none;
 }
 .gallery-stage{
   position:relative;
+  width:100%;
   aspect-ratio:4/3;
-  min-height:330px;
-  border-radius:18px;
+  min-height:300px;
   overflow:hidden;
+  border-radius:18px;
   background:var(--cream-deep);
 }
 .gallery-slide{
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
   opacity:0;
   transform:scale(1.045);
   transition:opacity 1s ease, transform 5s ease;
-  pointer-events:none;
 }
 .gallery-slide.active{
   opacity:1;
   transform:scale(1);
-  pointer-events:auto;
 }
 .gallery-slide img{
-  width:100%; height:100%;
+  width:100%;
+  height:100%;
   object-fit:cover;
-  object-position:center;
+  display:block;
 }
 .gallery-placeholder{
-  width:100%; height:100%;
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; gap:8px;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
   color:#fff;
-  text-shadow:0 2px 12px rgba(0,0,0,.18);
+  text-shadow:0 2px 12px rgba(0,0,0,.20);
 }
-.gallery-placeholder .num{
+.gallery-placeholder .roman{
   font-family:var(--font-script);
-  font-size:clamp(50px,8vw,78px);
+  font-size:clamp(55px,9vw,82px);
   line-height:1;
 }
-.gallery-placeholder .label{
+.gallery-placeholder .memory{
+  margin-top:8px;
   font-family:var(--font-label);
   font-size:11px;
   letter-spacing:.2em;
@@ -420,45 +442,53 @@ a{color:inherit;}
 }
 .gallery-caption{
   position:absolute;
-  left:0; right:0; bottom:0;
-  padding:55px 24px 22px;
-  color:#fff;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:55px 20px 20px;
   text-align:center;
-  background:linear-gradient(transparent,rgba(30,20,18,.58));
+  color:#fff;
   font-family:var(--font-label);
   font-size:11px;
-  letter-spacing:.18em;
+  letter-spacing:.16em;
   text-transform:uppercase;
+  background:linear-gradient(transparent,rgba(20,14,12,.55));
 }
 .gallery-arrow{
   position:absolute;
-  z-index:3;
-  top:50%; transform:translateY(-50%);
-  width:44px; height:44px;
+  z-index:4;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;
+  height:44px;
+  border:1px solid rgba(255,255,255,.6);
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.55);
-  background:rgba(30,20,18,.24);
+  background:rgba(20,14,12,.25);
   color:#fff;
-  backdrop-filter:blur(8px);
+  font-size:25px;
   cursor:pointer;
-  font-size:24px;
-  display:flex; align-items:center; justify-content:center;
-  transition:.3s var(--ease);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(8px);
 }
-.gallery-arrow:hover{background:rgba(30,20,18,.48); transform:translateY(-50%) scale(1.06);}
-.gallery-arrow.prev{left:18px;}
-.gallery-arrow.next{right:18px;}
+.gallery-arrow:hover{background:rgba(20,14,12,.48);}
+.gallery-prev{left:16px;}
+.gallery-next{right:16px;}
 .gallery-dots{
-  display:flex; justify-content:center; align-items:center;
-  gap:9px; margin:18px 0 4px;
+  display:flex;
+  justify-content:center;
+  gap:9px;
+  margin:18px 0 5px;
 }
 .gallery-dot{
-  width:8px; height:8px; padding:0;
+  width:8px;
+  height:8px;
+  padding:0;
   border:1px solid var(--gold-deep);
   border-radius:50%;
   background:transparent;
   cursor:pointer;
-  transition:.3s var(--ease);
 }
 .gallery-dot.active{
   background:var(--gold-deep);
@@ -467,9 +497,9 @@ a{color:inherit;}
 .gallery-note{
   text-align:center;
   color:var(--ink-soft);
+  font-size:13px;
   font-style:italic;
-  font-size:14px;
-  margin-top:10px;
+  margin:9px 0 2px;
 }
 
 /* ============================= SCHEDULE ============================= */
@@ -544,6 +574,44 @@ footer{
   .invite-card{padding:40px 22px;}
   .rsvp-btns{gap:12px;}
 }
+
+/* ===================== LANGUAGE SELECTOR ===================== */
+#languageSwitch{
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:70;
+  display:none;
+  gap:4px;
+  padding:5px;
+  border:1px solid rgba(201,160,90,.35);
+  border-radius:30px;
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  box-shadow:0 8px 25px rgba(80,55,35,.10);
+}
+#languageSwitch.show{display:flex;}
+#languageSwitch button{
+  border:0;
+  background:transparent;
+  color:var(--ink-soft);
+  border-radius:22px;
+  padding:7px 11px;
+  cursor:pointer;
+  font-family:var(--font-label);
+  font-size:10px;
+  letter-spacing:.08em;
+}
+#languageSwitch button.active{
+  background:var(--gold-deep);
+  color:#fff;
+}
+@media(max-width:600px){
+  #languageSwitch{top:12px;right:12px;}
+  #languageSwitch button{padding:6px 9px;font-size:9px;}
+}
+
 </style>
 </head>
 <body>
@@ -565,10 +633,10 @@ footer{
   <span class="disc">🎵</span>
 </div>
 
-<!-- ===================== LANGUAGE SWITCH ===================== -->
-<div id="languageSwitch" aria-label="Language selection">
-  <button type="button" id="langEN" class="active">EN</button>
-  <button type="button" id="langHI">हिंदी</button>
+<!-- ===================== LANGUAGE SELECTOR ===================== -->
+<div id="languageSwitch" aria-label="Language">
+  <button id="langEN" type="button" class="active">EN</button>
+  <button id="langHI" type="button">हिंदी</button>
 </div>
 
 <audio id="bgMusic" loop preload="auto">
@@ -615,8 +683,11 @@ footer{
       <span class="name" id="brideName">Surila Devi</span>
     </div>
 
-    <p class="hero-msg" data-en="With immense joy and gratitude, we cordially invite you to celebrate the 25th Wedding Anniversary of our beloved parents — a milestone of love, patience, and grace."
-      data-hi="अत्यंत हर्ष और कृतज्ञता के साथ हम आपको अपने प्रिय माता-पिता की 25वीं विवाह वर्षगांठ मनाने के लिए सादर आमंत्रित करते हैं — प्रेम, धैर्य और स्नेह की एक खूबसूरत यात्रा।">With immense joy and gratitude, we cordially invite you to celebrate the 25th Wedding Anniversary of our beloved parents — a milestone of love, patience, and grace.</p>
+    <p class="hero-msg"
+      data-en="With immense joy and gratitude, we cordially invite you to celebrate the 25th Wedding Anniversary of our beloved parents — a milestone of love, patience, and grace."
+      data-hi="अत्यंत हर्ष और कृतज्ञता के साथ हम आपको अपने प्रिय माता-पिता की 25वीं विवाह वर्षगांठ मनाने के लिए सादर आमंत्रित करते हैं — प्रेम, धैर्य और स्नेह की एक खूबसूरत यात्रा।">
+      With immense joy and gratitude, we cordially invite you to celebrate the <strong>25th Wedding Anniversary</strong> of our beloved parents — a milestone of love, patience, and grace.
+    </p>
 
     <div class="hero-scroll"><span data-en="Scroll to unfold" data-hi="आगे बढ़ने के लिए स्क्रॉल करें">Scroll to unfold</span><span class="chevron"></span></div>
   </div>
@@ -636,7 +707,7 @@ footer{
         <div class="invite-corner bl"><svg viewBox="0 0 34 34"><path d="M2 34 V10 Q2 2 10 2 H34"/></svg></div>
         <div class="invite-corner br"><svg viewBox="0 0 34 34"><path d="M2 34 V10 Q2 2 10 2 H34"/></svg></div>
 
-        <p class="invite-quote" data-en="&quot;Twenty-five years ago, two hearts became one.&quot;" data-hi="&quot;पच्चीस वर्ष पहले, दो दिल एक हो गए।&quot;">"Twenty-five years ago, two hearts became one."</p>
+        <p class="invite-quote">"Twenty-five years ago, two hearts became one."</p>
         <h3 class="invite-title">Shishpal Singh &amp; Surila Devi</h3>
 
         <div class="invite-grid">
@@ -655,7 +726,7 @@ footer{
   <div class="container">
     <div class="eyebrow reveal" data-en="Counting Down" data-hi="उलटी गिनती">Counting Down</div>
     <h2 class="section-title reveal" data-en="Until We Celebrate" data-hi="उत्सव तक">Until We Celebrate</h2>
-    <p class="section-sub reveal" data-en="Every moment brings us closer to this beautiful celebration" data-hi="हर पल हमें इस खूबसूरत उत्सव के और करीब ला रहा है">Every moment brings us closer to this beautiful celebration</p>
+    <p class="section-sub reveal">Every moment brings us closer to this beautiful celebration</p>
 
     <div class="countdown-grid reveal">
       <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-label" data-en="Days" data-hi="दिन">Days</div></div>
@@ -673,22 +744,18 @@ footer{
     <h2 class="section-title reveal" data-en="Our Journey in Pictures" data-hi="तस्वीरों में हमारी यात्रा">Our Journey in Pictures</h2>
     <p class="section-sub reveal" data-en="Twenty-five years, a thousand memories — here are a few" data-hi="पच्चीस साल, अनगिनत यादें — उनमें से कुछ खास पल">Twenty-five years, a thousand memories — here are a few</p>
 
-    <div class="gallery-card reveal" id="galleryCard">
-      <div class="gallery-stage" id="galleryStage" aria-label="Photo gallery">
-        <button class="gallery-arrow prev" id="galleryPrev" type="button" aria-label="Previous photo">‹</button>
+    <div class="gallery-card reveal">
+      <div class="gallery-stage" id="galleryStage">
+        <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Previous photo">‹</button>
         <div id="gallerySlides"></div>
-        <button class="gallery-arrow next" id="galleryNext" type="button" aria-label="Next photo">›</button>
+        <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="Next photo">›</button>
       </div>
       <div class="gallery-dots" id="galleryDots"></div>
-      <div class="gallery-note" data-en="Photos gently change every 5 seconds" data-hi="तस्वीरें हर 5 सेकंड में धीरे-धीरे बदलेंगी">Photos gently change every 5 seconds</div>
+      <div class="gallery-note" data-en="Photos change gently every 5 seconds" data-hi="तस्वीरें हर 5 सेकंड में धीरे-धीरे बदलेंगी">Photos change gently every 5 seconds</div>
     </div>
   </div>
 </section>
 
-<div class="lb-prev" id="lbPrev">‹</div>
-    <div class="lb-next" id="lbNext">›</div>
-    <div id="lbContent" style="width:100%;height:100%;"></div>
-  </div>
 </div>
 
 <!-- ===================== SCHEDULE ===================== -->
@@ -696,7 +763,7 @@ footer{
   <div class="container">
     <div class="eyebrow reveal" data-en="Order of the Day" data-hi="कार्यक्रम क्रम">Order of the Day</div>
     <h2 class="section-title reveal" data-en="Event Schedule" data-hi="कार्यक्रम की समय-सारणी">Event Schedule</h2>
-    <p class="section-sub reveal" data-en="A gentle flow of moments, made to be savoured" data-hi="खूबसूरत पलों से सजा एक यादगार क्रम">A gentle flow of moments, made to be savoured</p>
+    <p class="section-sub reveal">A gentle flow of moments, made to be savoured</p>
 
     <div class="timeline reveal" id="scheduleTimeline"></div>
   </div>
@@ -707,13 +774,13 @@ footer{
   <div class="container">
     <div class="eyebrow reveal" data-en="Find Us" data-hi="हमसे मिलें">Find Us</div>
     <h2 class="section-title reveal" data-en="The Venue" data-hi="कार्यक्रम स्थल">The Venue</h2>
-    <p class="section-sub reveal" data-en="We can't wait to welcome you" data-hi="हम आपका स्वागत करने के लिए उत्सुक हैं">We can't wait to welcome you</p>
+    <p class="section-sub reveal">We can't wait to welcome you</p>
 
     <div class="map-card reveal">
       <div class="pin">📍</div>
       <div class="venue-name" id="mapVenueName">Jashan Banquet Hall</div>
       <div class="venue-addr" id="mapVenueAddr">19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025</div>
-      <a href="#" target="_blank" rel="noopener" class="btn-gold" id="mapsLink" data-en="📍 Get Directions" data-hi="📍 रास्ता देखें">📍 Get Directions</a>
+      <a href="#" target="_blank" rel="noopener" class="btn-gold" id="mapsLink">📍 Get Directions</a>
     </div>
   </div>
 </section>
@@ -723,12 +790,10 @@ footer{
   <div class="container">
     <div class="eyebrow reveal" data-en="Kindly Respond" data-hi="कृपया उत्तर दें">Kindly Respond</div>
     <h2 class="section-title reveal" data-en="RSVP" data-hi="आरएसवीपी">RSVP</h2>
-    <p class="section-sub reveal" data-en="Your presence would mean the world to us" data-hi="आपकी उपस्थिति हमारे लिए बहुत मायने रखती है">Your presence would mean the world to us</p>
+    <p class="section-sub reveal">Your presence would mean the world to us</p>
 
     <div class="rsvp-card reveal">
-      <p style="font-style:italic;color:var(--ink-soft);max-width:460px;margin:0 auto;"
-         data-en="Please let us know if you'll be joining us — reach out through any of the options below."
-         data-hi="कृपया हमें बताएं कि आप हमारे साथ शामिल होंगे — नीचे दिए गए किसी भी माध्यम से संपर्क करें।">
+      <p style="font-style:italic;color:var(--ink-soft);max-width:460px;margin:0 auto;">
         Please let us know if you'll be joining us — reach out through any of the options below.
       </p>
       <div class="rsvp-btns">
@@ -736,7 +801,7 @@ footer{
           <div class="ic">📞</div><div class="lbl" data-en="Call" data-hi="कॉल">Call</div><div class="sub">+91 9036748473</div>
         </a>
         <a class="rsvp-btn" id="rsvpWhatsapp" href="https://wa.me/919036748473" target="_blank" rel="noopener">
-          <div class="ic">💬</div><div class="lbl" data-en="WhatsApp" data-hi="व्हाट्सऐप">WhatsApp</div><div class="sub" data-en="Message Us" data-hi="हमें संदेश भेजें">Message Us</div>
+          <div class="ic">💬</div><div class="lbl" data-en="WhatsApp" data-hi="व्हाट्सऐप">WhatsApp</div><div class="sub">Message Us</div>
         </a>
         <a class="rsvp-btn" id="rsvpEmail" href="mailto:family@example.com">
           <div class="ic">📧</div><div class="lbl" data-en="Email" data-hi="ईमेल">Email</div><div class="sub">anurana7975@gmail.com</div>
@@ -750,7 +815,7 @@ footer{
 <footer>
   <div class="divider-orn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg></div>
   <p class="footer-quote" data-en="With love, always" data-hi="सदैव प्रेम के साथ">With love, always</p>
-  <p class="footer-sub" data-en="We are blessed to have your love and presence as we celebrate this special milestone." data-hi="इस विशेष अवसर पर आपके प्रेम और उपस्थिति से हम धन्य हैं।">We are blessed to have your love and presence as we celebrate this special milestone.</p>
+  <p class="footer-sub">We are blessed to have your love and presence as we celebrate this special milestone.</p>
   <p class="footer-names">Shishpal Singh &amp; Surila Devi</p>
   <p class="footer-fine">Silver Jubilee · 23 November 2026</p>
 </footer>
@@ -763,28 +828,28 @@ footer{
 const CONFIG = {
   groomName: "Shishpal Singh",
   brideName: "Surila Devi",
-  eventDate: "2026-11-23T10:30:00+05:30",
+  eventDate: "2026-11-23T10:30:00+05:30", // ISO date used for countdown
   eventDateDisplay: "23 November 2026",
   eventDay: "Monday",
   eventTime: "10:30 AM onwards",
   venueName: "Jashan Banquet Hall",
   venueAddress: "19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jashan+Banquet+Hall%2C+19+Rhenius+St%2C+Langford+Town%2C+Richmond+Town%2C+Bengaluru%2C+Karnataka+560025",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jashan+Banquet+Hall%2C+19+Rhenius+St%2C+Langford+Town%2C+Richmond+Town%2C+Bengaluru%2C+Karnataka+560025", // paste your Google Maps link here
   contact: {
     phone: "+91 9036748473",
     phoneHref: "tel:+919036748473",
     whatsappHref: "https://wa.me/919036748473",
     email: "anurana7975@gmail.com"
   },
-  // Add exactly 5 photo paths/URLs here.
-  // Example: "photo1.jpg", "photo2.jpg", ...
+  // Replace with real photo URLs to use actual pictures in the gallery.
+  // Leave empty to keep the elegant placeholder tiles.
   galleryPhotos: ["", "", "", "", ""],
   schedule: [
-    { title: "Welcome Guests", hi: "अतिथियों का स्वागत", time: "10:30 AM", icon: "🌸" },
-    { title: "Cake Cutting", hi: "केक कटिंग", time: "11:15 AM onwards", icon: "🎂" },
-    { title: "Lunch", hi: "भोजन", time: "12:00 PM", icon: "🍽️" },
-    { title: "Family Photos", hi: "परिवार की तस्वीरें", time: "1:00 PM", icon: "📸" },
-    { title: "End of program", hi: "कार्यक्रम का समापन", time: "4:00 PM", icon: "🙏" }
+    { title: "Welcome Guests", time: "10:30 AM", icon: "🌸" },
+    { title: "Cake Cutting", time: "11:15 AM onwards", icon: "🎂" },
+    { title: "Lunch", time: "12:00 PM", icon: "🍽️" },
+    { title: "Family Photos", time: "1:00 PM", icon: "📸" },
+    { title: "End of program", time: "4:00 PM", icon: "🙏" }
   ],
   musicSrc: "heeriye.mp3"
 };
@@ -804,41 +869,14 @@ document.getElementById('rsvpCall').querySelector('.sub').textContent = CONFIG.c
 document.getElementById('rsvpWhatsapp').href = CONFIG.contact.whatsappHref;
 document.getElementById('rsvpEmail').href = "mailto:" + CONFIG.contact.email;
 document.getElementById('rsvpEmail').querySelector('.sub').textContent = CONFIG.contact.email;
-if (CONFIG.musicSrc) {
-  document.querySelector('#bgMusic source').src = CONFIG.musicSrc;
-  document.getElementById('bgMusic').load();
-}
+if (CONFIG.musicSrc) { document.querySelector('#bgMusic source').src = CONFIG.musicSrc; document.getElementById('bgMusic').load(); }
 
-/* ---------- language switching ---------- */
-let currentLanguage = "en";
-
-function applyLanguage(lang){
-  currentLanguage = lang;
-  document.documentElement.lang = lang === "hi" ? "hi" : "en";
-
-  document.querySelectorAll("[data-en][data-hi]").forEach(el => {
-    el.textContent = lang === "hi" ? el.dataset.hi : el.dataset.en;
-  });
-
-  document.querySelectorAll(".lang-value").forEach(el => {
-    el.textContent = lang === "hi" ? (el.dataset.hi || el.dataset.en) : el.dataset.en;
-  });
-
-  document.getElementById("langEN").classList.toggle("active", lang === "en");
-  document.getElementById("langHI").classList.toggle("active", lang === "hi");
-
-  renderSchedule();
-}
-
-document.getElementById("langEN").addEventListener("click", () => applyLanguage("en"));
-document.getElementById("langHI").addEventListener("click", () => applyLanguage("hi"));
-
-/* ---------- build gallery: one large card, 5 photos, auto fade/zoom ---------- */
+/* ---------- gallery: one card with exactly 5 photos ---------- */
 const gallerySlides = document.getElementById("gallerySlides");
 const galleryDots = document.getElementById("galleryDots");
 const galleryStage = document.getElementById("galleryStage");
 
-const gradients = [
+const galleryGradients = [
   "linear-gradient(150deg,#f0c9d3,#e6cd9a)",
   "linear-gradient(150deg,#e6cd9a,#c9a05a)",
   "linear-gradient(150deg,#f8e3e8,#e0a3b4)",
@@ -846,25 +884,24 @@ const gradients = [
   "linear-gradient(150deg,#e0a3b4,#c9a05a)"
 ];
 
-const romanNum = ["I","II","III","IV","V"];
 let galleryIndex = 0;
 let galleryTimer = null;
 
-CONFIG.galleryPhotos.slice(0, 5).forEach((src, i) => {
+CONFIG.galleryPhotos.slice(0,5).forEach((src, i) => {
   const slide = document.createElement("div");
   slide.className = "gallery-slide" + (i === 0 ? " active" : "");
 
   if (src) {
     const img = document.createElement("img");
     img.src = src;
-    img.alt = `Silver Jubilee memory ${i + 1}`;
+    img.alt = "Silver Jubilee memory " + (i + 1);
     img.loading = i === 0 ? "eager" : "lazy";
     slide.appendChild(img);
   } else {
     slide.innerHTML = `
-      <div class="gallery-placeholder" style="background:${gradients[i]}">
-        <div class="num">${romanNum[i]}</div>
-        <div class="label">Memory ${i + 1}</div>
+      <div class="gallery-placeholder" style="background:${galleryGradients[i]}">
+        <div class="roman">${["I","II","III","IV","V"][i]}</div>
+        <div class="memory">Memory ${i + 1}</div>
       </div>`;
   }
 
@@ -876,14 +913,14 @@ CONFIG.galleryPhotos.slice(0, 5).forEach((src, i) => {
   gallerySlides.appendChild(slide);
 
   const dot = document.createElement("button");
-  dot.type = "button";
   dot.className = "gallery-dot" + (i === 0 ? " active" : "");
-  dot.setAttribute("aria-label", `Go to photo ${i + 1}`);
+  dot.type = "button";
+  dot.setAttribute("aria-label", "Photo " + (i + 1));
   dot.addEventListener("click", () => showGallery(i, true));
   galleryDots.appendChild(dot);
 });
 
-function showGallery(index, resetTimer = false){
+function showGallery(index, restart = false){
   const slides = [...document.querySelectorAll(".gallery-slide")];
   const dots = [...document.querySelectorAll(".gallery-dot")];
   if (!slides.length) return;
@@ -895,10 +932,11 @@ function showGallery(index, resetTimer = false){
 
   slides.forEach((slide, i) => {
     const caption = slide.querySelector(".gallery-caption");
-    if (caption) caption.textContent = currentLanguage === "hi" ? `यादगार पल ${i + 1}` : `Memory ${i + 1}`;
+    if (caption) caption.textContent =
+      currentLanguage === "hi" ? `यादगार पल ${i + 1}` : `Memory ${i + 1}`;
   });
 
-  if (resetTimer) startGalleryTimer();
+  if (restart) startGalleryTimer();
 }
 
 function startGalleryTimer(){
@@ -910,18 +948,16 @@ document.getElementById("galleryPrev").addEventListener("click", () => showGalle
 document.getElementById("galleryNext").addEventListener("click", () => showGallery(galleryIndex + 1, true));
 startGalleryTimer();
 
-/* Touch swipe for the photo card */
-let touchStartX = 0;
+let galleryTouchX = 0;
 galleryStage.addEventListener("touchstart", e => {
-  touchStartX = e.changedTouches[0].clientX;
-}, { passive:true });
+  galleryTouchX = e.changedTouches[0].clientX;
+}, {passive:true});
 
 galleryStage.addEventListener("touchend", e => {
-  const deltaX = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(deltaX) < 45) return;
-  if (deltaX < 0) showGallery(galleryIndex + 1, true);
-  else showGallery(galleryIndex - 1, true);
-}, { passive:true });
+  const dx = e.changedTouches[0].clientX - galleryTouchX;
+  if (Math.abs(dx) < 45) return;
+  showGallery(galleryIndex + (dx < 0 ? 1 : -1), true);
+}, {passive:true});
 
 /* ---------- schedule ---------- */
 const tl = document.getElementById("scheduleTimeline");
@@ -931,11 +967,10 @@ function renderSchedule(){
   CONFIG.schedule.forEach(s => {
     const el = document.createElement("div");
     el.className = "t-item";
-    const title = currentLanguage === "hi" ? s.hi : s.title;
     el.innerHTML = `
       <div class="t-dot">${s.icon}</div>
       <div class="t-content">
-        <div class="t-title">${title}</div>
+        <div class="t-title">${currentLanguage === "hi" ? (s.hi || s.title) : s.title}</div>
         <div class="t-time">${s.time}</div>
       </div>`;
     tl.appendChild(el);
@@ -945,25 +980,21 @@ renderSchedule();
 
 /* ---------- countdown ---------- */
 const target = new Date(CONFIG.eventDate).getTime();
-
 function updateCountdown(){
   const now = Date.now();
   let diff = target - now;
   if (diff < 0) diff = 0;
-
   const d = Math.floor(diff / 86400000);
   const h = Math.floor((diff % 86400000) / 3600000);
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
-
-  document.getElementById("cd-days").textContent = String(d).padStart(2,"0");
-  document.getElementById("cd-hours").textContent = String(h).padStart(2,"0");
-  document.getElementById("cd-mins").textContent = String(m).padStart(2,"0");
-  document.getElementById("cd-secs").textContent = String(s).padStart(2,"0");
+  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
-
 
 /* ---------- reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
@@ -1080,7 +1111,6 @@ let musicPlaying = false;
 
 enterBtn.addEventListener('click', () => {
   entryOverlay.classList.add('hide');
-  document.getElementById("languageSwitch").classList.add("show");
   burstConfetti();
   startAmbientFX();
   if (CONFIG.musicSrc) {
@@ -1097,6 +1127,44 @@ musicToggle.addEventListener('click', () => {
 
 /* initial nav state */
 updateNav();
+
+
+/* ---------- language switch ---------- */
+let currentLanguage = "en";
+
+function applyLanguage(lang){
+  currentLanguage = lang;
+  document.documentElement.lang = lang === "hi" ? "hi" : "en";
+
+  document.querySelectorAll("[data-en][data-hi]").forEach(el => {
+    el.textContent = lang === "hi" ? el.getAttribute("data-hi") : el.getAttribute("data-en");
+  });
+
+  /* Core invitation values */
+  const values = {
+    eventTimeTxt: ["10:30 AM onwards", "सुबह 10:30 बजे से"],
+    eventDayTxt: ["Monday", "सोमवार"]
+  };
+
+  Object.keys(values).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = values[id][lang === "hi" ? 1 : 0];
+  });
+
+  document.getElementById("langEN").classList.toggle("active", lang === "en");
+  document.getElementById("langHI").classList.toggle("active", lang === "hi");
+
+  renderSchedule();
+  showGallery(galleryIndex);
+}
+
+document.getElementById("langEN").addEventListener("click", () => applyLanguage("en"));
+document.getElementById("langHI").addEventListener("click", () => applyLanguage("hi"));
+
+/* Show language selector only after the original invitation is opened. */
+enterBtn.addEventListener("click", () => {
+  document.getElementById("languageSwitch").classList.add("show");
+});
 </script>
 </body>
 </html>
