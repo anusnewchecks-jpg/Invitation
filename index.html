@@ -329,46 +329,174 @@ a{color:inherit;}
 @media (max-width:480px){.cd-box{width:78px; padding:16px 4px;}}
 
 /* ============================= GALLERY ============================= */
-.gallery-grid{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:18px;
-}
-.gallery-item{
-  position:relative; aspect-ratio:1/1.15; border-radius:16px; overflow:hidden; cursor:pointer;
-  box-shadow:0 14px 30px -18px rgba(169,121,63,.5);
-  transform:translateY(0); transition:transform .5s var(--ease), box-shadow .5s var(--ease);
-  border:1px solid rgba(255,255,255,.6);
-}
-.gallery-item:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 24px 44px -18px rgba(169,121,63,.6);}
-.gallery-item .ph{
-  position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
-  color:#fff; font-family:var(--font-label); font-size:11px; letter-spacing:.15em; text-transform:uppercase;
-}
-.gallery-item .ph span.num{font-family:var(--font-script); font-size:34px; letter-spacing:0; text-transform:none;}
-.gallery-item::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,.15); opacity:0; transition:.4s;}
-.gallery-item:hover::before{opacity:1;}
-.gallery-item .zoom-ic{position:absolute; bottom:12px; right:12px; color:#fff; font-size:16px; opacity:0; transition:.4s; z-index:2;}
-.gallery-item:hover .zoom-ic{opacity:1;}
 
-/* lightbox */
-#lightbox{
-  position:fixed; inset:0; background:rgba(30,20,18,.92); z-index:9997;
-  display:none; align-items:center; justify-content:center; padding:20px;
+.gallery-slider{
+  width:min(850px,92vw);
+  margin:35px auto 0;
+  position:relative;
 }
-#lightbox.open{display:flex; animation:fadeIn .35s ease;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-#lightbox .lb-frame{
-  position:relative; max-width:640px; width:100%; aspect-ratio:1/1.1; border-radius:18px; overflow:hidden;
-  box-shadow:0 30px 80px rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.2);
+
+.gallery-slide{
+  position:relative;
+  width:100%;
+  height:520px;
+  overflow:hidden;
+  border-radius:24px;
+  background:linear-gradient(135deg,var(--pink-soft),var(--gold-light));
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 25px 60px -20px rgba(169,121,63,.45);
 }
-.lb-close,.lb-prev,.lb-next{
-  position:absolute; z-index:2; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
-  color:#fff; width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:18px; backdrop-filter:blur(6px); transition:.3s;
+
+.gallery-slide img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  opacity:1;
+  transform:scale(1);
+  transition:opacity .55s ease,transform 4.8s ease;
 }
-.lb-close:hover,.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.28);}
-.lb-close{top:-54px; right:0;}
-.lb-prev{left:14px; top:50%; transform:translateY(-50%);}
-.lb-next{right:14px; top:50%; transform:translateY(-50%);}
+
+.gallery-slide img.zooming{
+  transform:scale(1.06);
+}
+
+.gallery-placeholder{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:8px;
+  color:#fff;
+  text-align:center;
+  font-family:var(--font-label);
+  font-size:11px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+
+.gallery-placeholder .num{
+  font-family:var(--font-script);
+  font-size:58px;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+.gallery-slide::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:38%;
+  background:linear-gradient(to top,rgba(0,0,0,.48),transparent);
+  pointer-events:none;
+}
+
+.gallery-caption{
+  position:absolute;
+  left:24px;
+  bottom:20px;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:9px 16px;
+  border-radius:12px;
+  background:rgba(0,0,0,.28);
+  backdrop-filter:blur(8px);
+  color:#fff;
+}
+
+.gallery-caption .num{
+  font-family:var(--font-script);
+  font-size:32px;
+  line-height:1;
+}
+
+.gallery-caption .label{
+  font-family:var(--font-label);
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+
+.gallery-arrow{
+  position:absolute;
+  top:50%;
+  z-index:4;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(30,20,18,.25);
+  color:#fff;
+  backdrop-filter:blur(8px);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  line-height:1;
+  transform:translateY(-50%);
+  transition:.3s var(--ease);
+}
+
+.gallery-arrow:hover{
+  background:rgba(30,20,18,.5);
+  transform:translateY(-50%) scale(1.08);
+}
+
+.gallery-prev{left:18px;}
+.gallery-next{right:18px;}
+
+.gallery-dots{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-top:18px;
+}
+
+.gallery-dot{
+  width:8px;
+  height:8px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:var(--gold-light);
+  cursor:pointer;
+  transition:.35s var(--ease);
+}
+
+.gallery-dot.active{
+  width:28px;
+  border-radius:10px;
+  background:var(--gold-deep);
+}
+
+.gallery-counter{
+  text-align:center;
+  margin-top:10px;
+  font-family:var(--font-label);
+  font-size:10px;
+  letter-spacing:.2em;
+  color:var(--ink-soft);
+  text-transform:uppercase;
+}
+
+@media (max-width:700px){
+  .gallery-slide{height:430px;border-radius:20px;}
+  .gallery-arrow{width:40px;height:40px;font-size:24px;}
+  .gallery-prev{left:12px;}
+  .gallery-next{right:12px;}
+}
+
+@media (max-width:480px){
+  .gallery-slide{height:360px;border-radius:18px;}
+  .gallery-caption{left:16px;bottom:16px;padding:8px 13px;}
+  .gallery-caption .num{font-size:28px;}
+}
 
 /* ============================= SCHEDULE ============================= */
 .timeline{position:relative; max-width:640px; margin:0 auto;}
@@ -444,7 +572,7 @@ footer{
 }
 </style>
 </head>
-<body>
+<body style="overflow:hidden;">
 
 <!-- ===================== ENTRY OVERLAY ===================== -->
 <div id="entry-overlay">
@@ -547,7 +675,7 @@ footer{
   <div class="container">
     <div class="eyebrow reveal">Counting Down</div>
     <h2 class="section-title reveal">Until We Celebrate</h2>
-    <p class="section-sub reveal">Every moment brings us closer to this golden evening</p>
+    <p class="section-sub reveal">Every moment brings us closer to this beautiful celebration</p>
 
     <div class="countdown-grid reveal">
       <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-label">Days</div></div>
@@ -565,23 +693,38 @@ footer{
     <h2 class="section-title reveal">Our Journey in Pictures</h2>
     <p class="section-sub reveal">Twenty-five years, a thousand memories — here are a few</p>
 
-    <div class="gallery-grid reveal" id="galleryGrid"></div>
+    <div class="gallery-slider reveal" id="gallerySlider">
+
+      <div class="gallery-slide" id="gallerySlide">
+
+        <div class="gallery-placeholder" id="galleryPlaceholder">
+          <span class="num">I</span>
+          <span>Memory 1</span>
+        </div>
+
+        <img id="gallerySlideImage" alt="Silver Jubilee memory">
+
+        <div class="gallery-caption">
+          <span class="num" id="gallerySlideNumber">I</span>
+          <span class="label">Cherished Memory</span>
+        </div>
+
+        <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Previous photo">‹</button>
+        <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="Next photo">›</button>
+
+      </div>
+
+      <div class="gallery-dots" id="galleryDots" aria-label="Gallery navigation"></div>
+      <div class="gallery-counter" id="galleryCounter">1 / 5</div>
+
+    </div>
   </div>
 </section>
-
-<div id="lightbox">
-  <div class="lb-frame">
-    <div class="lb-close" id="lbClose">✕</div>
-    <div class="lb-prev" id="lbPrev">‹</div>
-    <div class="lb-next" id="lbNext">›</div>
-    <div id="lbContent" style="width:100%;height:100%;"></div>
-  </div>
-</div>
 
 <!-- ===================== SCHEDULE ===================== -->
 <section id="schedule" class="section">
   <div class="container">
-    <div class="eyebrow reveal">Order of the Evening</div>
+    <div class="eyebrow reveal">Order of the Day</div>
     <h2 class="section-title reveal">Event Schedule</h2>
     <p class="section-sub reveal">A gentle flow of moments, made to be savoured</p>
 
@@ -617,13 +760,13 @@ footer{
         Please let us know if you'll be joining us — reach out through any of the options below.
       </p>
       <div class="rsvp-btns">
-        <a class="rsvp-btn" id="rsvpCall" href="tel:+91 9036748473">
+        <a class="rsvp-btn" id="rsvpCall" href="tel:+919036748473">
           <div class="ic">📞</div><div class="lbl">Call</div><div class="sub">+91 9036748473</div>
         </a>
         <a class="rsvp-btn" id="rsvpWhatsapp" href="https://wa.me/919036748473" target="_blank" rel="noopener">
           <div class="ic">💬</div><div class="lbl">WhatsApp</div><div class="sub">Message Us</div>
         </a>
-        <a class="rsvp-btn" id="rsvpEmail" href="mailto:family@example.com">
+        <a class="rsvp-btn" id="rsvpEmail" href="mailto:anurana7975@gmail.com">
           <div class="ic">📧</div><div class="lbl">Email</div><div class="sub">anurana7975@gmail.com</div>
         </a>
       </div>
@@ -647,22 +790,27 @@ footer{
 const CONFIG = {
   groomName: "Shishpal Singh",
   brideName: "Surila Devi",
-  eventDate: "2026-11-23T18:30:00", // ISO date used for countdown
+  eventDate: "2026-11-23T10:30:00", // ISO date used for countdown
   eventDateDisplay: "23 November 2026",
   eventDay: "Monday",
   eventTime: "10:30 AM onwards",
   venueName: "Jashan Banquet Hall",
   venueAddress: "19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025",
-  mapsUrl: "google.com/maps?kgmid=/g/11k9khgbmf&hl=en-IN&shem=epsd1,esd2e,ltae,rimspwouoe&shndl=30&kgs=0281e6393d285b7c&um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KUEtDb4SFa47MaVpSwzAxjdF&daddr=19,+Rhenius+St,+Langford+Town,+Richmond+Town,+Bengaluru,+Karnataka+560025", // paste your Google Maps link here
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jashan+Banquet+Hall%2C+19+Rhenius+St%2C+Langford+Town%2C+Richmond+Town%2C+Bengaluru%2C+Karnataka+560025", // paste your Google Maps link here
   contact: {
     phone: "+91 9036748473",
     phoneHref: "tel:+91 9036748473",
-    whatsappHref: "https://web.whatsapp.com/",
+    whatsappHref: "https://wa.me/919036748473",
     email: "anurana7975@gmail.com"
   },
-  // Replace with real photo URLs to use actual pictures in the gallery.
-  // Leave empty to keep the elegant placeholder tiles.
-  galleryPhotos: ["", "", "", "", "", "", "", "", "", ""],
+  // Add up to 5 image paths. Leave any slot empty to show the elegant placeholder.
+  galleryPhotos: [
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
   schedule: [
     { title: "Welcome Guests", time: "10:30 AM", icon: "🌸" },
     { title: "Cake Cutting", time: "11:15 AM onwards", icon: "🎂" },
@@ -690,58 +838,158 @@ document.getElementById('rsvpEmail').href = "mailto:" + CONFIG.contact.email;
 document.getElementById('rsvpEmail').querySelector('.sub').textContent = CONFIG.contact.email;
 if (CONFIG.musicSrc) { document.querySelector('#bgMusic source').src = CONFIG.musicSrc; document.getElementById('bgMusic').load(); }
 
-/* ---------- build gallery ---------- */
-const galleryGrid = document.getElementById('galleryGrid');
-const gradients = [
-  'linear-gradient(150deg,#f0c9d3,#e6cd9a)',
-  'linear-gradient(150deg,#e6cd9a,#c9a05a)',
-  'linear-gradient(150deg,#f8e3e8,#e0a3b4)',
-  'linear-gradient(150deg,#c9cdd3,#f0c9d3)',
-  'linear-gradient(150deg,#e0a3b4,#c9a05a)',
+/* ---------- single large gallery slider ---------- */
+
+const galleryImage = document.getElementById('gallerySlideImage');
+const galleryPlaceholder = document.getElementById('galleryPlaceholder');
+const galleryNumber = document.getElementById('gallerySlideNumber');
+const galleryDots = document.getElementById('galleryDots');
+const galleryCounter = document.getElementById('galleryCounter');
+const galleryPrev = document.getElementById('galleryPrev');
+const galleryNext = document.getElementById('galleryNext');
+
+/*
+  Exactly 5 gallery slots.
+  Leave a slot as "" to show the elegant placeholder.
+*/
+const galleryPhotos = CONFIG.galleryPhotos.slice(0, 5);
+
+const galleryRoman = ["I", "II", "III", "IV", "V"];
+
+const galleryGradients = [
+  "linear-gradient(150deg,#f0c9d3,#e6cd9a)",
+  "linear-gradient(150deg,#e6cd9a,#c9a05a)",
+  "linear-gradient(150deg,#f8e3e8,#e0a3b4)",
+  "linear-gradient(150deg,#c9cdd3,#f0c9d3)",
+  "linear-gradient(150deg,#e0a3b4,#c9a05a)"
 ];
-const romanNum = ["I","II","III","IV","V","VI","VII","VIII","IX","X"];
-CONFIG.galleryPhotos.forEach((src, i) => {
-  const item = document.createElement('div');
-  item.className = 'gallery-item';
-  if (src) {
-    item.style.backgroundImage = `url(${src})`;
-    item.style.backgroundSize = 'cover';
-    item.style.backgroundPosition = 'center';
+
+let galleryIndex = 0;
+let galleryTimer = null;
+let galleryTransitioning = false;
+
+function buildGalleryDots(){
+  galleryDots.innerHTML = "";
+
+  galleryPhotos.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "gallery-dot";
+    dot.setAttribute("aria-label", `Show memory ${i + 1}`);
+
+    dot.addEventListener("click", () => {
+      showGalleryImage(i, true);
+    });
+
+    galleryDots.appendChild(dot);
+  });
+}
+
+function updateGalleryDots(){
+  galleryDots.querySelectorAll(".gallery-dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === galleryIndex);
+  });
+}
+
+function renderGalleryImage(){
+  const src = galleryPhotos[galleryIndex];
+  const roman = galleryRoman[galleryIndex];
+  const gradient = galleryGradients[galleryIndex];
+
+  galleryNumber.textContent = roman;
+  galleryCounter.textContent = `${galleryIndex + 1} / ${galleryPhotos.length}`;
+
+  if (src && src.trim()){
+    galleryPlaceholder.style.display = "none";
+    galleryImage.style.display = "block";
+    galleryImage.src = src;
+    galleryImage.alt = `Silver Jubilee memory ${galleryIndex + 1}`;
   } else {
-    item.style.background = gradients[i % gradients.length];
+    galleryImage.removeAttribute("src");
+    galleryImage.style.display = "none";
+    galleryPlaceholder.style.display = "flex";
+    galleryPlaceholder.style.background = gradient;
+    galleryPlaceholder.innerHTML =
+      `<span class="num">${roman}</span><span>Memory ${galleryIndex + 1}</span>`;
   }
-  item.innerHTML = `<div class="ph"><span class="num">${romanNum[i]}</span><span>Memory ${i+1}</span></div><div class="zoom-ic">🔍</div>`;
-  item.addEventListener('click', () => openLightbox(i));
-  galleryGrid.appendChild(item);
+
+  updateGalleryDots();
+
+  galleryImage.classList.remove("zooming");
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => galleryImage.classList.add("zooming"));
+  });
+}
+
+function showGalleryImage(nextIndex, resetTimer = false){
+  if (!galleryPhotos.length || galleryTransitioning) return;
+
+  nextIndex = (nextIndex + galleryPhotos.length) % galleryPhotos.length;
+
+  if (nextIndex === galleryIndex && !resetTimer){
+    renderGalleryImage();
+    return;
+  }
+
+  galleryTransitioning = true;
+  galleryImage.style.opacity = "0";
+
+  setTimeout(() => {
+    galleryIndex = nextIndex;
+    renderGalleryImage();
+
+    requestAnimationFrame(() => {
+      galleryImage.style.opacity = "1";
+    });
+
+    setTimeout(() => {
+      galleryTransitioning = false;
+    }, 560);
+  }, 280);
+
+  if (resetTimer) startGalleryAutoPlay();
+}
+
+function startGalleryAutoPlay(){
+  clearInterval(galleryTimer);
+
+  galleryTimer = setInterval(() => {
+    if (!document.hidden){
+      showGalleryImage(galleryIndex + 1);
+    }
+  }, 5000);
+}
+
+galleryPrev.addEventListener("click", () => {
+  showGalleryImage(galleryIndex - 1, true);
 });
 
-/* ---------- lightbox ---------- */
-const lightbox = document.getElementById('lightbox');
-const lbContentEl = document.getElementById('lbContent');
-let lbIndex = 0;
-function renderLB(i){
-  const src = CONFIG.galleryPhotos[i];
-  const grad = gradients[i % gradients.length];
-  if (src) {
-    lbContentEl.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;">`;
-  } else {
-    lbContentEl.innerHTML = `<div style="width:100%;height:100%;background:${grad};display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:'Playfair Display',serif;">
-      <div style="font-family:'Great Vibes',cursive;font-size:52px;">${romanNum[i]}</div>
-      <div style="font-family:'Cinzel',serif;letter-spacing:.2em;font-size:12px;text-transform:uppercase;margin-top:6px;">Memory ${i+1}</div>
-    </div>`;
-  }
-}
-function openLightbox(i){ lbIndex = i; renderLB(i); lightbox.classList.add('open'); }
-document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
-lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
-document.getElementById('lbPrev').addEventListener('click', (e) => { e.stopPropagation(); lbIndex = (lbIndex - 1 + 10) % 10; renderLB(lbIndex); });
-document.getElementById('lbNext').addEventListener('click', (e) => { e.stopPropagation(); lbIndex = (lbIndex + 1) % 10; renderLB(lbIndex); });
-document.addEventListener('keydown', (e) => {
-  if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'Escape') lightbox.classList.remove('open');
-  if (e.key === 'ArrowLeft') document.getElementById('lbPrev').click();
-  if (e.key === 'ArrowRight') document.getElementById('lbNext').click();
+galleryNext.addEventListener("click", () => {
+  showGalleryImage(galleryIndex + 1, true);
 });
+
+/* Swipe support for phones */
+let galleryTouchStartX = 0;
+
+document.getElementById("gallerySlide").addEventListener("touchstart", (e) => {
+  galleryTouchStartX = e.changedTouches[0].clientX;
+}, { passive: true });
+
+document.getElementById("gallerySlide").addEventListener("touchend", (e) => {
+  const deltaX = e.changedTouches[0].clientX - galleryTouchStartX;
+
+  if (Math.abs(deltaX) < 45) return;
+
+  if (deltaX < 0){
+    showGalleryImage(galleryIndex + 1, true);
+  } else {
+    showGalleryImage(galleryIndex - 1, true);
+  }
+}, { passive: true });
+
+buildGalleryDots();
+renderGalleryImage();
+startGalleryAutoPlay();
 
 /* ---------- schedule ---------- */
 const tl = document.getElementById('scheduleTimeline');
