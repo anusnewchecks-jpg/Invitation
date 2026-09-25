@@ -533,9 +533,9 @@ footer{
 
         <div class="invite-grid">
           <div class="detail"><div class="ic">📅</div><div class="lbl">Date</div><div class="val" id="eventDateTxt">23 November 2026</div></div>
-          <div class="detail"><div class="ic">🗓️</div><div class="lbl">Day</div><div class="val" id="eventDayTxt">Tuesday</div></div>
-          <div class="detail"><div class="ic">🕡</div><div class="lbl">Time</div><div class="val" id="eventTimeTxt">6:30 PM onwards</div></div>
-          <div class="detail"><div class="ic">📍</div><div class="lbl">Venue</div><div class="val small" id="eventVenueTxt">[Hall Name]<br>[Complete Address]</div></div>
+          <div class="detail"><div class="ic">🗓️</div><div class="lbl">Day</div><div class="val" id="eventDayTxt">Monday</div></div>
+          <div class="detail"><div class="ic">🕡</div><div class="lbl">Time</div><div class="val" id="eventTimeTxt">10:30 AM onwards</div></div>
+          <div class="detail"><div class="ic">📍</div><div class="lbl">Venue</div><div class="val small" id="eventVenueTxt">Jashan Banquet Hall<br>19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025</div></div>
         </div>
       </div>
     </div>
@@ -598,8 +598,8 @@ footer{
 
     <div class="map-card reveal">
       <div class="pin">📍</div>
-      <div class="venue-name" id="mapVenueName">[Hall Name]</div>
-      <div class="venue-addr" id="mapVenueAddr">[Complete Address]</div>
+      <div class="venue-name" id="mapVenueName">Jashan Banquet Hall</div>
+      <div class="venue-addr" id="mapVenueAddr">19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025</div>
       <a href="#" target="_blank" rel="noopener" class="btn-gold" id="mapsLink">📍 Get Directions</a>
     </div>
   </div>
@@ -624,7 +624,7 @@ footer{
           <div class="ic">💬</div><div class="lbl">WhatsApp</div><div class="sub">Message Us</div>
         </a>
         <a class="rsvp-btn" id="rsvpEmail" href="mailto:family@example.com">
-          <div class="ic">📧</div><div class="lbl">Email</div><div class="sub">family@example.com</div>
+          <div class="ic">📧</div><div class="lbl">Email</div><div class="sub">anurana7975@gmail.com</div>
         </a>
       </div>
     </div>
@@ -647,34 +647,29 @@ footer{
 const CONFIG = {
   groomName: "Shishpal Singh",
   brideName: "Surila Devi",
-
-  eventDate: "2026-11-23T10:30:00",
+  eventDate: "2026-11-23T18:30:00", // ISO date used for countdown
   eventDateDisplay: "23 November 2026",
   eventDay: "Monday",
   eventTime: "10:30 AM onwards",
-
   venueName: "Jashan Banquet Hall",
   venueAddress: "19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025",
-
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jashan+Banquet+Hall%2C+19+Rhenius+St%2C+Langford+Town%2C+Richmond+Town%2C+Bengaluru%2C+Karnataka+560025",
-
+  mapsUrl: "google.com/maps?kgmid=/g/11k9khgbmf&hl=en-IN&shem=epsd1,esd2e,ltae,rimspwouoe&shndl=30&kgs=0281e6393d285b7c&um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KUEtDb4SFa47MaVpSwzAxjdF&daddr=19,+Rhenius+St,+Langford+Town,+Richmond+Town,+Bengaluru,+Karnataka+560025", // paste your Google Maps link here
   contact: {
     phone: "+91 9036748473",
-    phoneHref: "tel:+919036748473",
-    whatsappHref: "https://wa.me/919036748473",
-    email: "family@example.com"
+    phoneHref: "tel:+91 9036748473",
+    whatsappHref: "https://web.whatsapp.com/",
+    email: "anurana7975@gmail.com"
   },
-
+  // Replace with real photo URLs to use actual pictures in the gallery.
+  // Leave empty to keep the elegant placeholder tiles.
   galleryPhotos: ["", "", "", "", "", "", "", "", "", ""],
-
   schedule: [
     { title: "Welcome Guests", time: "10:30 AM", icon: "🌸" },
-    { title: "Cake Cutting", time: "11:15 AM", icon: "🎂" },
+    { title: "Cake Cutting", time: "11:15 AM onwards", icon: "🎂" },
     { title: "Lunch", time: "12:00 PM", icon: "🍽️" },
     { title: "Family Photos", time: "1:00 PM", icon: "📸" },
-    { title: "Vote of Thanks", time: "3:45 PM", icon: "🙏" }
+    { title: "End of program", time: "4:00 PM", icon: "🙏" }
   ],
-
   musicSrc: "heeriye.mp3"
 };
 
