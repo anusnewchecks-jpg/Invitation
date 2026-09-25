@@ -821,7 +821,6 @@ footer{
 </footer>
 
 <script>
-<script>
 /* =====================================================================
    EDIT CONFIG — change names / date / venue / contacts / photos here
    ===================================================================== */
@@ -870,6 +869,9 @@ document.getElementById('rsvpWhatsapp').href = CONFIG.contact.whatsappHref;
 document.getElementById('rsvpEmail').href = "mailto:" + CONFIG.contact.email;
 document.getElementById('rsvpEmail').querySelector('.sub').textContent = CONFIG.contact.email;
 if (CONFIG.musicSrc) { document.querySelector('#bgMusic source').src = CONFIG.musicSrc; document.getElementById('bgMusic').load(); }
+
+/* ---------- language state ---------- */
+let currentLanguage = "en";
 
 /* ---------- gallery: one card with exactly 5 photos ---------- */
 const gallerySlides = document.getElementById("gallerySlides");
@@ -1130,8 +1132,6 @@ updateNav();
 
 
 /* ---------- language switch ---------- */
-let currentLanguage = "en";
-
 function applyLanguage(lang){
   currentLanguage = lang;
   document.documentElement.lang = lang === "hi" ? "hi" : "en";
