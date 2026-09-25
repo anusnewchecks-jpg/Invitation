@@ -187,6 +187,32 @@ a{color:inherit;}
 #musicToggle:hover{transform:scale(1.08);}
 #musicToggle.playing .disc{animation:spin 4s linear infinite;}
 
+
+/* ============================= LANGUAGE SWITCH ============================= */
+#languageSwitch{
+  position:fixed; right:22px; top:22px; z-index:61;
+  display:none; align-items:center; gap:4px;
+  padding:5px; border-radius:30px;
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(201,160,90,.38);
+  box-shadow:0 10px 26px -16px rgba(169,121,63,.5);
+}
+#languageSwitch.show{display:flex;}
+#languageSwitch button{
+  border:0; background:transparent; color:var(--ink-soft);
+  padding:7px 10px; border-radius:22px; cursor:pointer;
+  font-family:var(--font-label); font-size:10px; letter-spacing:.08em;
+  transition:.3s var(--ease);
+}
+#languageSwitch button.active{
+  background:var(--gold-deep); color:#fff;
+}
+@media (max-width:600px){
+  #languageSwitch{right:14px; top:14px;}
+  #languageSwitch button{padding:6px 8px; font-size:9px;}
+}
+
 /* ============================= HERO ============================= */
 .hero{
   min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center;
@@ -329,173 +355,121 @@ a{color:inherit;}
 @media (max-width:480px){.cd-box{width:78px; padding:16px 4px;}}
 
 /* ============================= GALLERY ============================= */
-
-.gallery-slider{
-  width:min(850px,92vw);
-  margin:35px auto 0;
+.gallery-card{
   position:relative;
-}
-
-.gallery-slide{
-  position:relative;
-  width:100%;
-  height:520px;
-  overflow:hidden;
+  max-width:760px;
+  margin:0 auto;
+  padding:14px;
   border-radius:24px;
-  background:linear-gradient(135deg,var(--pink-soft),var(--gold-light));
+  background:rgba(255,255,255,.58);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
   border:1px solid rgba(255,255,255,.75);
-  box-shadow:0 25px 60px -20px rgba(169,121,63,.45);
+  box-shadow:var(--shadow-soft);
+  overflow:hidden;
 }
-
-.gallery-slide img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-  opacity:1;
-  transform:scale(1);
-  transition:opacity .55s ease,transform 4.8s ease;
-}
-
-.gallery-slide img.zooming{
-  transform:scale(1.06);
-}
-
-.gallery-placeholder{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:8px;
-  color:#fff;
-  text-align:center;
-  font-family:var(--font-label);
-  font-size:11px;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-}
-
-.gallery-placeholder .num{
-  font-family:var(--font-script);
-  font-size:58px;
-  letter-spacing:0;
-  text-transform:none;
-}
-
-.gallery-slide::after{
+.gallery-card::before{
   content:"";
-  position:absolute;
-  inset:auto 0 0;
-  height:38%;
-  background:linear-gradient(to top,rgba(0,0,0,.48),transparent);
+  position:absolute; inset:8px;
+  border:1px solid rgba(201,160,90,.35);
+  border-radius:18px;
   pointer-events:none;
 }
-
+.gallery-stage{
+  position:relative;
+  aspect-ratio:4/3;
+  min-height:330px;
+  border-radius:18px;
+  overflow:hidden;
+  background:var(--cream-deep);
+}
+.gallery-slide{
+  position:absolute; inset:0;
+  opacity:0;
+  transform:scale(1.045);
+  transition:opacity 1s ease, transform 5s ease;
+  pointer-events:none;
+}
+.gallery-slide.active{
+  opacity:1;
+  transform:scale(1);
+  pointer-events:auto;
+}
+.gallery-slide img{
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.gallery-placeholder{
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:8px;
+  color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.gallery-placeholder .num{
+  font-family:var(--font-script);
+  font-size:clamp(50px,8vw,78px);
+  line-height:1;
+}
+.gallery-placeholder .label{
+  font-family:var(--font-label);
+  font-size:11px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
 .gallery-caption{
   position:absolute;
-  left:24px;
-  bottom:20px;
-  z-index:3;
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-  padding:9px 16px;
-  border-radius:12px;
-  background:rgba(0,0,0,.28);
-  backdrop-filter:blur(8px);
+  left:0; right:0; bottom:0;
+  padding:55px 24px 22px;
   color:#fff;
-}
-
-.gallery-caption .num{
-  font-family:var(--font-script);
-  font-size:32px;
-  line-height:1;
-}
-
-.gallery-caption .label{
+  text-align:center;
+  background:linear-gradient(transparent,rgba(30,20,18,.58));
   font-family:var(--font-label);
-  font-size:10px;
-  letter-spacing:.22em;
+  font-size:11px;
+  letter-spacing:.18em;
   text-transform:uppercase;
 }
-
 .gallery-arrow{
   position:absolute;
-  top:50%;
-  z-index:4;
-  width:46px;
-  height:46px;
+  z-index:3;
+  top:50%; transform:translateY(-50%);
+  width:44px; height:44px;
   border-radius:50%;
   border:1px solid rgba(255,255,255,.55);
-  background:rgba(30,20,18,.25);
+  background:rgba(30,20,18,.24);
   color:#fff;
   backdrop-filter:blur(8px);
   cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  line-height:1;
-  transform:translateY(-50%);
+  font-size:24px;
+  display:flex; align-items:center; justify-content:center;
   transition:.3s var(--ease);
 }
-
-.gallery-arrow:hover{
-  background:rgba(30,20,18,.5);
-  transform:translateY(-50%) scale(1.08);
-}
-
-.gallery-prev{left:18px;}
-.gallery-next{right:18px;}
-
+.gallery-arrow:hover{background:rgba(30,20,18,.48); transform:translateY(-50%) scale(1.06);}
+.gallery-arrow.prev{left:18px;}
+.gallery-arrow.next{right:18px;}
 .gallery-dots{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  margin-top:18px;
+  display:flex; justify-content:center; align-items:center;
+  gap:9px; margin:18px 0 4px;
 }
-
 .gallery-dot{
-  width:8px;
-  height:8px;
-  padding:0;
-  border:0;
+  width:8px; height:8px; padding:0;
+  border:1px solid var(--gold-deep);
   border-radius:50%;
-  background:var(--gold-light);
+  background:transparent;
   cursor:pointer;
-  transition:.35s var(--ease);
+  transition:.3s var(--ease);
 }
-
 .gallery-dot.active{
-  width:28px;
-  border-radius:10px;
   background:var(--gold-deep);
+  transform:scale(1.35);
 }
-
-.gallery-counter{
+.gallery-note{
   text-align:center;
-  margin-top:10px;
-  font-family:var(--font-label);
-  font-size:10px;
-  letter-spacing:.2em;
   color:var(--ink-soft);
-  text-transform:uppercase;
-}
-
-@media (max-width:700px){
-  .gallery-slide{height:430px;border-radius:20px;}
-  .gallery-arrow{width:40px;height:40px;font-size:24px;}
-  .gallery-prev{left:12px;}
-  .gallery-next{right:12px;}
-}
-
-@media (max-width:480px){
-  .gallery-slide{height:360px;border-radius:18px;}
-  .gallery-caption{left:16px;bottom:16px;padding:8px 13px;}
-  .gallery-caption .num{font-size:28px;}
+  font-style:italic;
+  font-size:14px;
+  margin-top:10px;
 }
 
 /* ============================= SCHEDULE ============================= */
@@ -572,7 +546,7 @@ footer{
 }
 </style>
 </head>
-<body style="overflow:hidden;">
+<body>
 
 <!-- ===================== ENTRY OVERLAY ===================== -->
 <div id="entry-overlay">
@@ -590,6 +564,13 @@ footer{
 <div id="musicToggle" title="Toggle music">
   <span class="disc">🎵</span>
 </div>
+
+<!-- ===================== LANGUAGE SWITCH ===================== -->
+<div id="languageSwitch" aria-label="Language selection">
+  <button type="button" id="langEN" class="active">EN</button>
+  <button type="button" id="langHI">हिंदी</button>
+</div>
+
 <audio id="bgMusic" loop preload="auto">
     <source src="heeriye.mp3" type="audio/mpeg">
 </audio>
@@ -611,9 +592,9 @@ footer{
   <div class="hero-glow"></div>
   <div class="hero-frame"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">✦ Silver Jubilee Celebration ✦</div>
-    <h1 class="hero-script">25 Years of Togetherness</h1>
-    <div class="hero-title">A Golden Chapter Written in Silver</div>
+    <div class="hero-eyebrow" data-en="✦ Silver Jubilee Celebration ✦" data-hi="✦ रजत जयंती समारोह ✦">✦ Silver Jubilee Celebration ✦</div>
+    <h1 class="hero-script" data-en="25 Years of Togetherness" data-hi="साथ के 25 वर्ष">25 Years of Togetherness</h1>
+    <div class="hero-title" data-en="A Golden Chapter Written in Silver" data-hi="चाँदी में लिखा एक सुनहरा अध्याय">A Golden Chapter Written in Silver</div>
 
     <!-- COUPLE PORTRAIT — real photo of Shishpal Singh & Surila Devi,
          embedded as base64 so the file stays a single self-contained HTML.
@@ -634,20 +615,19 @@ footer{
       <span class="name" id="brideName">Surila Devi</span>
     </div>
 
-    <p class="hero-msg">With immense joy and gratitude, we cordially invite you to celebrate
-      the <strong>25th Wedding Anniversary</strong> of our beloved parents — a milestone of
-      love, patience, and grace.</p>
+    <p class="hero-msg" data-en="With immense joy and gratitude, we cordially invite you to celebrate the 25th Wedding Anniversary of our beloved parents — a milestone of love, patience, and grace."
+      data-hi="अत्यंत हर्ष और कृतज्ञता के साथ हम आपको अपने प्रिय माता-पिता की 25वीं विवाह वर्षगांठ मनाने के लिए सादर आमंत्रित करते हैं — प्रेम, धैर्य और स्नेह की एक खूबसूरत यात्रा।">With immense joy and gratitude, we cordially invite you to celebrate the 25th Wedding Anniversary of our beloved parents — a milestone of love, patience, and grace.</p>
 
-    <div class="hero-scroll"><span>Scroll to unfold</span><span class="chevron"></span></div>
+    <div class="hero-scroll"><span data-en="Scroll to unfold" data-hi="आगे बढ़ने के लिए स्क्रॉल करें">Scroll to unfold</span><span class="chevron"></span></div>
   </div>
 </section>
 
 <!-- ===================== INVITATION CARD ===================== -->
 <section id="invite" class="section">
   <div class="container">
-    <div class="eyebrow reveal">The Invitation</div>
-    <h2 class="section-title reveal">You Are Cordially Invited</h2>
-    <p class="section-sub reveal">A gathering of love, laughter, and twenty-five golden years</p>
+    <div class="eyebrow reveal" data-en="The Invitation" data-hi="आमंत्रण">The Invitation</div>
+    <h2 class="section-title reveal" data-en="You Are Cordially Invited" data-hi="आप सादर आमंत्रित हैं">You Are Cordially Invited</h2>
+    <p class="section-sub reveal" data-en="A gathering of love, laughter, and twenty-five golden years" data-hi="प्रेम, हँसी और पच्चीस सुनहरे वर्षों का मिलन">A gathering of love, laughter, and twenty-five golden years</p>
 
     <div class="invite-wrap reveal">
       <div class="invite-card">
@@ -656,14 +636,14 @@ footer{
         <div class="invite-corner bl"><svg viewBox="0 0 34 34"><path d="M2 34 V10 Q2 2 10 2 H34"/></svg></div>
         <div class="invite-corner br"><svg viewBox="0 0 34 34"><path d="M2 34 V10 Q2 2 10 2 H34"/></svg></div>
 
-        <p class="invite-quote">"Twenty-five years ago, two hearts became one."</p>
+        <p class="invite-quote" data-en="&quot;Twenty-five years ago, two hearts became one.&quot;" data-hi="&quot;पच्चीस वर्ष पहले, दो दिल एक हो गए।&quot;">"Twenty-five years ago, two hearts became one."</p>
         <h3 class="invite-title">Shishpal Singh &amp; Surila Devi</h3>
 
         <div class="invite-grid">
-          <div class="detail"><div class="ic">📅</div><div class="lbl">Date</div><div class="val" id="eventDateTxt">23 November 2026</div></div>
-          <div class="detail"><div class="ic">🗓️</div><div class="lbl">Day</div><div class="val" id="eventDayTxt">Monday</div></div>
-          <div class="detail"><div class="ic">🕡</div><div class="lbl">Time</div><div class="val" id="eventTimeTxt">10:30 AM onwards</div></div>
-          <div class="detail"><div class="ic">📍</div><div class="lbl">Venue</div><div class="val small" id="eventVenueTxt">Jashan Banquet Hall<br>19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025</div></div>
+          <div class="detail"><div class="ic">📅</div><div class="lbl" data-en="Date" data-hi="तारीख">Date</div><div class="val" id="eventDateTxt">23 November 2026</div></div>
+          <div class="detail"><div class="ic">🗓️</div><div class="lbl" data-en="Day" data-hi="दिन">Day</div><div class="val" id="eventDayTxt">Monday</div></div>
+          <div class="detail"><div class="ic">🕡</div><div class="lbl" data-en="Time" data-hi="समय">Time</div><div class="val" id="eventTimeTxt">10:30 AM onwards</div></div>
+          <div class="detail"><div class="ic">📍</div><div class="lbl" data-en="Venue" data-hi="स्थान">Venue</div><div class="val small" id="eventVenueTxt">Jashan Banquet Hall<br>19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025</div></div>
         </div>
       </div>
     </div>
@@ -673,15 +653,15 @@ footer{
 <!-- ===================== COUNTDOWN ===================== -->
 <section id="countdown" class="section">
   <div class="container">
-    <div class="eyebrow reveal">Counting Down</div>
-    <h2 class="section-title reveal">Until We Celebrate</h2>
-    <p class="section-sub reveal">Every moment brings us closer to this beautiful celebration</p>
+    <div class="eyebrow reveal" data-en="Counting Down" data-hi="उलटी गिनती">Counting Down</div>
+    <h2 class="section-title reveal" data-en="Until We Celebrate" data-hi="उत्सव तक">Until We Celebrate</h2>
+    <p class="section-sub reveal" data-en="Every moment brings us closer to this beautiful celebration" data-hi="हर पल हमें इस खूबसूरत उत्सव के और करीब ला रहा है">Every moment brings us closer to this beautiful celebration</p>
 
     <div class="countdown-grid reveal">
-      <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-label">Days</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-hours">00</div><div class="cd-label">Hours</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-mins">00</div><div class="cd-label">Minutes</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-secs">00</div><div class="cd-label">Seconds</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-label" data-en="Days" data-hi="दिन">Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-hours">00</div><div class="cd-label" data-en="Hours" data-hi="घंटे">Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-mins">00</div><div class="cd-label" data-en="Minutes" data-hi="मिनट">Minutes</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-secs">00</div><div class="cd-label" data-en="Seconds" data-hi="सेकंड">Seconds</div></div>
     </div>
   </div>
 </section>
@@ -689,44 +669,34 @@ footer{
 <!-- ===================== GALLERY ===================== -->
 <section id="gallery" class="section">
   <div class="container">
-    <div class="eyebrow reveal">Cherished Moments</div>
-    <h2 class="section-title reveal">Our Journey in Pictures</h2>
-    <p class="section-sub reveal">Twenty-five years, a thousand memories — here are a few</p>
+    <div class="eyebrow reveal" data-en="Cherished Moments" data-hi="यादगार पल">Cherished Moments</div>
+    <h2 class="section-title reveal" data-en="Our Journey in Pictures" data-hi="तस्वीरों में हमारी यात्रा">Our Journey in Pictures</h2>
+    <p class="section-sub reveal" data-en="Twenty-five years, a thousand memories — here are a few" data-hi="पच्चीस साल, अनगिनत यादें — उनमें से कुछ खास पल">Twenty-five years, a thousand memories — here are a few</p>
 
-    <div class="gallery-slider reveal" id="gallerySlider">
-
-      <div class="gallery-slide" id="gallerySlide">
-
-        <div class="gallery-placeholder" id="galleryPlaceholder">
-          <span class="num">I</span>
-          <span>Memory 1</span>
-        </div>
-
-        <img id="gallerySlideImage" alt="Silver Jubilee memory">
-
-        <div class="gallery-caption">
-          <span class="num" id="gallerySlideNumber">I</span>
-          <span class="label">Cherished Memory</span>
-        </div>
-
-        <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="Previous photo">‹</button>
-        <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="Next photo">›</button>
-
+    <div class="gallery-card reveal" id="galleryCard">
+      <div class="gallery-stage" id="galleryStage" aria-label="Photo gallery">
+        <button class="gallery-arrow prev" id="galleryPrev" type="button" aria-label="Previous photo">‹</button>
+        <div id="gallerySlides"></div>
+        <button class="gallery-arrow next" id="galleryNext" type="button" aria-label="Next photo">›</button>
       </div>
-
-      <div class="gallery-dots" id="galleryDots" aria-label="Gallery navigation"></div>
-      <div class="gallery-counter" id="galleryCounter">1 / 5</div>
-
+      <div class="gallery-dots" id="galleryDots"></div>
+      <div class="gallery-note" data-en="Photos gently change every 5 seconds" data-hi="तस्वीरें हर 5 सेकंड में धीरे-धीरे बदलेंगी">Photos gently change every 5 seconds</div>
     </div>
   </div>
 </section>
 
+<div class="lb-prev" id="lbPrev">‹</div>
+    <div class="lb-next" id="lbNext">›</div>
+    <div id="lbContent" style="width:100%;height:100%;"></div>
+  </div>
+</div>
+
 <!-- ===================== SCHEDULE ===================== -->
 <section id="schedule" class="section">
   <div class="container">
-    <div class="eyebrow reveal">Order of the Day</div>
-    <h2 class="section-title reveal">Event Schedule</h2>
-    <p class="section-sub reveal">A gentle flow of moments, made to be savoured</p>
+    <div class="eyebrow reveal" data-en="Order of the Day" data-hi="कार्यक्रम क्रम">Order of the Day</div>
+    <h2 class="section-title reveal" data-en="Event Schedule" data-hi="कार्यक्रम की समय-सारणी">Event Schedule</h2>
+    <p class="section-sub reveal" data-en="A gentle flow of moments, made to be savoured" data-hi="खूबसूरत पलों से सजा एक यादगार क्रम">A gentle flow of moments, made to be savoured</p>
 
     <div class="timeline reveal" id="scheduleTimeline"></div>
   </div>
@@ -735,15 +705,15 @@ footer{
 <!-- ===================== MAP ===================== -->
 <section id="map" class="section">
   <div class="container">
-    <div class="eyebrow reveal">Find Us</div>
-    <h2 class="section-title reveal">The Venue</h2>
-    <p class="section-sub reveal">We can't wait to welcome you</p>
+    <div class="eyebrow reveal" data-en="Find Us" data-hi="हमसे मिलें">Find Us</div>
+    <h2 class="section-title reveal" data-en="The Venue" data-hi="कार्यक्रम स्थल">The Venue</h2>
+    <p class="section-sub reveal" data-en="We can't wait to welcome you" data-hi="हम आपका स्वागत करने के लिए उत्सुक हैं">We can't wait to welcome you</p>
 
     <div class="map-card reveal">
       <div class="pin">📍</div>
       <div class="venue-name" id="mapVenueName">Jashan Banquet Hall</div>
       <div class="venue-addr" id="mapVenueAddr">19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025</div>
-      <a href="#" target="_blank" rel="noopener" class="btn-gold" id="mapsLink">📍 Get Directions</a>
+      <a href="#" target="_blank" rel="noopener" class="btn-gold" id="mapsLink" data-en="📍 Get Directions" data-hi="📍 रास्ता देखें">📍 Get Directions</a>
     </div>
   </div>
 </section>
@@ -751,23 +721,25 @@ footer{
 <!-- ===================== RSVP ===================== -->
 <section id="rsvp" class="section">
   <div class="container">
-    <div class="eyebrow reveal">Kindly Respond</div>
-    <h2 class="section-title reveal">RSVP</h2>
-    <p class="section-sub reveal">Your presence would mean the world to us</p>
+    <div class="eyebrow reveal" data-en="Kindly Respond" data-hi="कृपया उत्तर दें">Kindly Respond</div>
+    <h2 class="section-title reveal" data-en="RSVP" data-hi="आरएसवीपी">RSVP</h2>
+    <p class="section-sub reveal" data-en="Your presence would mean the world to us" data-hi="आपकी उपस्थिति हमारे लिए बहुत मायने रखती है">Your presence would mean the world to us</p>
 
     <div class="rsvp-card reveal">
-      <p style="font-style:italic;color:var(--ink-soft);max-width:460px;margin:0 auto;">
+      <p style="font-style:italic;color:var(--ink-soft);max-width:460px;margin:0 auto;"
+         data-en="Please let us know if you'll be joining us — reach out through any of the options below."
+         data-hi="कृपया हमें बताएं कि आप हमारे साथ शामिल होंगे — नीचे दिए गए किसी भी माध्यम से संपर्क करें।">
         Please let us know if you'll be joining us — reach out through any of the options below.
       </p>
       <div class="rsvp-btns">
-        <a class="rsvp-btn" id="rsvpCall" href="tel:+919036748473">
-          <div class="ic">📞</div><div class="lbl">Call</div><div class="sub">+91 9036748473</div>
+        <a class="rsvp-btn" id="rsvpCall" href="tel:+91 9036748473">
+          <div class="ic">📞</div><div class="lbl" data-en="Call" data-hi="कॉल">Call</div><div class="sub">+91 9036748473</div>
         </a>
         <a class="rsvp-btn" id="rsvpWhatsapp" href="https://wa.me/919036748473" target="_blank" rel="noopener">
-          <div class="ic">💬</div><div class="lbl">WhatsApp</div><div class="sub">Message Us</div>
+          <div class="ic">💬</div><div class="lbl" data-en="WhatsApp" data-hi="व्हाट्सऐप">WhatsApp</div><div class="sub" data-en="Message Us" data-hi="हमें संदेश भेजें">Message Us</div>
         </a>
-        <a class="rsvp-btn" id="rsvpEmail" href="mailto:anurana7975@gmail.com">
-          <div class="ic">📧</div><div class="lbl">Email</div><div class="sub">anurana7975@gmail.com</div>
+        <a class="rsvp-btn" id="rsvpEmail" href="mailto:family@example.com">
+          <div class="ic">📧</div><div class="lbl" data-en="Email" data-hi="ईमेल">Email</div><div class="sub">anurana7975@gmail.com</div>
         </a>
       </div>
     </div>
@@ -777,12 +749,13 @@ footer{
 <!-- ===================== FOOTER ===================== -->
 <footer>
   <div class="divider-orn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg></div>
-  <p class="footer-quote">With love, always</p>
-  <p class="footer-sub">We are blessed to have your love and presence as we celebrate this special milestone.</p>
+  <p class="footer-quote" data-en="With love, always" data-hi="सदैव प्रेम के साथ">With love, always</p>
+  <p class="footer-sub" data-en="We are blessed to have your love and presence as we celebrate this special milestone." data-hi="इस विशेष अवसर पर आपके प्रेम और उपस्थिति से हम धन्य हैं।">We are blessed to have your love and presence as we celebrate this special milestone.</p>
   <p class="footer-names">Shishpal Singh &amp; Surila Devi</p>
   <p class="footer-fine">Silver Jubilee · 23 November 2026</p>
 </footer>
 
+<script>
 <script>
 /* =====================================================================
    EDIT CONFIG — change names / date / venue / contacts / photos here
@@ -790,33 +763,28 @@ footer{
 const CONFIG = {
   groomName: "Shishpal Singh",
   brideName: "Surila Devi",
-  eventDate: "2026-11-23T10:30:00", // ISO date used for countdown
+  eventDate: "2026-11-23T10:30:00+05:30",
   eventDateDisplay: "23 November 2026",
   eventDay: "Monday",
   eventTime: "10:30 AM onwards",
   venueName: "Jashan Banquet Hall",
   venueAddress: "19, Rhenius St, Langford Town, Richmond Town, Bengaluru, Karnataka 560025",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jashan+Banquet+Hall%2C+19+Rhenius+St%2C+Langford+Town%2C+Richmond+Town%2C+Bengaluru%2C+Karnataka+560025", // paste your Google Maps link here
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Jashan+Banquet+Hall%2C+19+Rhenius+St%2C+Langford+Town%2C+Richmond+Town%2C+Bengaluru%2C+Karnataka+560025",
   contact: {
     phone: "+91 9036748473",
-    phoneHref: "tel:+91 9036748473",
+    phoneHref: "tel:+919036748473",
     whatsappHref: "https://wa.me/919036748473",
     email: "anurana7975@gmail.com"
   },
-  // Add up to 5 image paths. Leave any slot empty to show the elegant placeholder.
-  galleryPhotos: [
-    "",
-    "",
-    "",
-    "",
-    ""
-  ],
+  // Add exactly 5 photo paths/URLs here.
+  // Example: "photo1.jpg", "photo2.jpg", ...
+  galleryPhotos: ["", "", "", "", ""],
   schedule: [
-    { title: "Welcome Guests", time: "10:30 AM", icon: "🌸" },
-    { title: "Cake Cutting", time: "11:15 AM onwards", icon: "🎂" },
-    { title: "Lunch", time: "12:00 PM", icon: "🍽️" },
-    { title: "Family Photos", time: "1:00 PM", icon: "📸" },
-    { title: "End of program", time: "4:00 PM", icon: "🙏" }
+    { title: "Welcome Guests", hi: "अतिथियों का स्वागत", time: "10:30 AM", icon: "🌸" },
+    { title: "Cake Cutting", hi: "केक कटिंग", time: "11:15 AM onwards", icon: "🎂" },
+    { title: "Lunch", hi: "भोजन", time: "12:00 PM", icon: "🍽️" },
+    { title: "Family Photos", hi: "परिवार की तस्वीरें", time: "1:00 PM", icon: "📸" },
+    { title: "End of program", hi: "कार्यक्रम का समापन", time: "4:00 PM", icon: "🙏" }
   ],
   musicSrc: "heeriye.mp3"
 };
@@ -836,27 +804,41 @@ document.getElementById('rsvpCall').querySelector('.sub').textContent = CONFIG.c
 document.getElementById('rsvpWhatsapp').href = CONFIG.contact.whatsappHref;
 document.getElementById('rsvpEmail').href = "mailto:" + CONFIG.contact.email;
 document.getElementById('rsvpEmail').querySelector('.sub').textContent = CONFIG.contact.email;
-if (CONFIG.musicSrc) { document.querySelector('#bgMusic source').src = CONFIG.musicSrc; document.getElementById('bgMusic').load(); }
+if (CONFIG.musicSrc) {
+  document.querySelector('#bgMusic source').src = CONFIG.musicSrc;
+  document.getElementById('bgMusic').load();
+}
 
-/* ---------- single large gallery slider ---------- */
+/* ---------- language switching ---------- */
+let currentLanguage = "en";
 
-const galleryImage = document.getElementById('gallerySlideImage');
-const galleryPlaceholder = document.getElementById('galleryPlaceholder');
-const galleryNumber = document.getElementById('gallerySlideNumber');
-const galleryDots = document.getElementById('galleryDots');
-const galleryCounter = document.getElementById('galleryCounter');
-const galleryPrev = document.getElementById('galleryPrev');
-const galleryNext = document.getElementById('galleryNext');
+function applyLanguage(lang){
+  currentLanguage = lang;
+  document.documentElement.lang = lang === "hi" ? "hi" : "en";
 
-/*
-  Exactly 5 gallery slots.
-  Leave a slot as "" to show the elegant placeholder.
-*/
-const galleryPhotos = CONFIG.galleryPhotos.slice(0, 5);
+  document.querySelectorAll("[data-en][data-hi]").forEach(el => {
+    el.textContent = lang === "hi" ? el.dataset.hi : el.dataset.en;
+  });
 
-const galleryRoman = ["I", "II", "III", "IV", "V"];
+  document.querySelectorAll(".lang-value").forEach(el => {
+    el.textContent = lang === "hi" ? (el.dataset.hi || el.dataset.en) : el.dataset.en;
+  });
 
-const galleryGradients = [
+  document.getElementById("langEN").classList.toggle("active", lang === "en");
+  document.getElementById("langHI").classList.toggle("active", lang === "hi");
+
+  renderSchedule();
+}
+
+document.getElementById("langEN").addEventListener("click", () => applyLanguage("en"));
+document.getElementById("langHI").addEventListener("click", () => applyLanguage("hi"));
+
+/* ---------- build gallery: one large card, 5 photos, auto fade/zoom ---------- */
+const gallerySlides = document.getElementById("gallerySlides");
+const galleryDots = document.getElementById("galleryDots");
+const galleryStage = document.getElementById("galleryStage");
+
+const gradients = [
   "linear-gradient(150deg,#f0c9d3,#e6cd9a)",
   "linear-gradient(150deg,#e6cd9a,#c9a05a)",
   "linear-gradient(150deg,#f8e3e8,#e0a3b4)",
@@ -864,159 +846,124 @@ const galleryGradients = [
   "linear-gradient(150deg,#e0a3b4,#c9a05a)"
 ];
 
+const romanNum = ["I","II","III","IV","V"];
 let galleryIndex = 0;
 let galleryTimer = null;
-let galleryTransitioning = false;
 
-function buildGalleryDots(){
-  galleryDots.innerHTML = "";
+CONFIG.galleryPhotos.slice(0, 5).forEach((src, i) => {
+  const slide = document.createElement("div");
+  slide.className = "gallery-slide" + (i === 0 ? " active" : "");
 
-  galleryPhotos.forEach((_, i) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.className = "gallery-dot";
-    dot.setAttribute("aria-label", `Show memory ${i + 1}`);
-
-    dot.addEventListener("click", () => {
-      showGalleryImage(i, true);
-    });
-
-    galleryDots.appendChild(dot);
-  });
-}
-
-function updateGalleryDots(){
-  galleryDots.querySelectorAll(".gallery-dot").forEach((dot, i) => {
-    dot.classList.toggle("active", i === galleryIndex);
-  });
-}
-
-function renderGalleryImage(){
-  const src = galleryPhotos[galleryIndex];
-  const roman = galleryRoman[galleryIndex];
-  const gradient = galleryGradients[galleryIndex];
-
-  galleryNumber.textContent = roman;
-  galleryCounter.textContent = `${galleryIndex + 1} / ${galleryPhotos.length}`;
-
-  if (src && src.trim()){
-    galleryPlaceholder.style.display = "none";
-    galleryImage.style.display = "block";
-    galleryImage.src = src;
-    galleryImage.alt = `Silver Jubilee memory ${galleryIndex + 1}`;
+  if (src) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `Silver Jubilee memory ${i + 1}`;
+    img.loading = i === 0 ? "eager" : "lazy";
+    slide.appendChild(img);
   } else {
-    galleryImage.removeAttribute("src");
-    galleryImage.style.display = "none";
-    galleryPlaceholder.style.display = "flex";
-    galleryPlaceholder.style.background = gradient;
-    galleryPlaceholder.innerHTML =
-      `<span class="num">${roman}</span><span>Memory ${galleryIndex + 1}</span>`;
+    slide.innerHTML = `
+      <div class="gallery-placeholder" style="background:${gradients[i]}">
+        <div class="num">${romanNum[i]}</div>
+        <div class="label">Memory ${i + 1}</div>
+      </div>`;
   }
 
-  updateGalleryDots();
+  const caption = document.createElement("div");
+  caption.className = "gallery-caption";
+  caption.textContent = currentLanguage === "hi" ? `यादगार पल ${i + 1}` : `Memory ${i + 1}`;
+  slide.appendChild(caption);
 
-  galleryImage.classList.remove("zooming");
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => galleryImage.classList.add("zooming"));
+  gallerySlides.appendChild(slide);
+
+  const dot = document.createElement("button");
+  dot.type = "button";
+  dot.className = "gallery-dot" + (i === 0 ? " active" : "");
+  dot.setAttribute("aria-label", `Go to photo ${i + 1}`);
+  dot.addEventListener("click", () => showGallery(i, true));
+  galleryDots.appendChild(dot);
+});
+
+function showGallery(index, resetTimer = false){
+  const slides = [...document.querySelectorAll(".gallery-slide")];
+  const dots = [...document.querySelectorAll(".gallery-dot")];
+  if (!slides.length) return;
+
+  galleryIndex = (index + slides.length) % slides.length;
+
+  slides.forEach((slide, i) => slide.classList.toggle("active", i === galleryIndex));
+  dots.forEach((dot, i) => dot.classList.toggle("active", i === galleryIndex));
+
+  slides.forEach((slide, i) => {
+    const caption = slide.querySelector(".gallery-caption");
+    if (caption) caption.textContent = currentLanguage === "hi" ? `यादगार पल ${i + 1}` : `Memory ${i + 1}`;
   });
+
+  if (resetTimer) startGalleryTimer();
 }
 
-function showGalleryImage(nextIndex, resetTimer = false){
-  if (!galleryPhotos.length || galleryTransitioning) return;
-
-  nextIndex = (nextIndex + galleryPhotos.length) % galleryPhotos.length;
-
-  if (nextIndex === galleryIndex && !resetTimer){
-    renderGalleryImage();
-    return;
-  }
-
-  galleryTransitioning = true;
-  galleryImage.style.opacity = "0";
-
-  setTimeout(() => {
-    galleryIndex = nextIndex;
-    renderGalleryImage();
-
-    requestAnimationFrame(() => {
-      galleryImage.style.opacity = "1";
-    });
-
-    setTimeout(() => {
-      galleryTransitioning = false;
-    }, 560);
-  }, 280);
-
-  if (resetTimer) startGalleryAutoPlay();
-}
-
-function startGalleryAutoPlay(){
+function startGalleryTimer(){
   clearInterval(galleryTimer);
-
-  galleryTimer = setInterval(() => {
-    if (!document.hidden){
-      showGalleryImage(galleryIndex + 1);
-    }
-  }, 5000);
+  galleryTimer = setInterval(() => showGallery(galleryIndex + 1), 5000);
 }
 
-galleryPrev.addEventListener("click", () => {
-  showGalleryImage(galleryIndex - 1, true);
-});
+document.getElementById("galleryPrev").addEventListener("click", () => showGallery(galleryIndex - 1, true));
+document.getElementById("galleryNext").addEventListener("click", () => showGallery(galleryIndex + 1, true));
+startGalleryTimer();
 
-galleryNext.addEventListener("click", () => {
-  showGalleryImage(galleryIndex + 1, true);
-});
+/* Touch swipe for the photo card */
+let touchStartX = 0;
+galleryStage.addEventListener("touchstart", e => {
+  touchStartX = e.changedTouches[0].clientX;
+}, { passive:true });
 
-/* Swipe support for phones */
-let galleryTouchStartX = 0;
-
-document.getElementById("gallerySlide").addEventListener("touchstart", (e) => {
-  galleryTouchStartX = e.changedTouches[0].clientX;
-}, { passive: true });
-
-document.getElementById("gallerySlide").addEventListener("touchend", (e) => {
-  const deltaX = e.changedTouches[0].clientX - galleryTouchStartX;
-
+galleryStage.addEventListener("touchend", e => {
+  const deltaX = e.changedTouches[0].clientX - touchStartX;
   if (Math.abs(deltaX) < 45) return;
-
-  if (deltaX < 0){
-    showGalleryImage(galleryIndex + 1, true);
-  } else {
-    showGalleryImage(galleryIndex - 1, true);
-  }
-}, { passive: true });
-
-buildGalleryDots();
-renderGalleryImage();
-startGalleryAutoPlay();
+  if (deltaX < 0) showGallery(galleryIndex + 1, true);
+  else showGallery(galleryIndex - 1, true);
+}, { passive:true });
 
 /* ---------- schedule ---------- */
-const tl = document.getElementById('scheduleTimeline');
-CONFIG.schedule.forEach(s => {
-  const el = document.createElement('div');
-  el.className = 't-item';
-  el.innerHTML = `<div class="t-dot">${s.icon}</div><div class="t-content"><div class="t-title">${s.title}</div><div class="t-time">${s.time}</div></div>`;
-  tl.appendChild(el);
-});
+const tl = document.getElementById("scheduleTimeline");
+
+function renderSchedule(){
+  tl.innerHTML = "";
+  CONFIG.schedule.forEach(s => {
+    const el = document.createElement("div");
+    el.className = "t-item";
+    const title = currentLanguage === "hi" ? s.hi : s.title;
+    el.innerHTML = `
+      <div class="t-dot">${s.icon}</div>
+      <div class="t-content">
+        <div class="t-title">${title}</div>
+        <div class="t-time">${s.time}</div>
+      </div>`;
+    tl.appendChild(el);
+  });
+}
+renderSchedule();
 
 /* ---------- countdown ---------- */
 const target = new Date(CONFIG.eventDate).getTime();
+
 function updateCountdown(){
   const now = Date.now();
   let diff = target - now;
   if (diff < 0) diff = 0;
+
   const d = Math.floor(diff / 86400000);
   const h = Math.floor((diff % 86400000) / 3600000);
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
-  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
-  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
-  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
-  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+
+  document.getElementById("cd-days").textContent = String(d).padStart(2,"0");
+  document.getElementById("cd-hours").textContent = String(h).padStart(2,"0");
+  document.getElementById("cd-mins").textContent = String(m).padStart(2,"0");
+  document.getElementById("cd-secs").textContent = String(s).padStart(2,"0");
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
 
 /* ---------- reveal on scroll ---------- */
 const revealEls = document.querySelectorAll('.reveal');
@@ -1133,6 +1080,7 @@ let musicPlaying = false;
 
 enterBtn.addEventListener('click', () => {
   entryOverlay.classList.add('hide');
+  document.getElementById("languageSwitch").classList.add("show");
   burstConfetti();
   startAmbientFX();
   if (CONFIG.musicSrc) {
